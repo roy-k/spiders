@@ -5,7 +5,8 @@ const config = {
     appenders: {
         now: {
             type: 'file',
-            filename: path.join(__dirname, '../logs/douban_now.log')
+            filename: path.join(__dirname, '../logs/douban_now.log'),
+            maxLogSize: 10485760,
         }
     },
     categories: {
@@ -13,7 +14,8 @@ const config = {
             appenders: ['now'],
             level: 'all'
         }
-    }
+    },
+    pm2: true
 }
 
 log4js.configure(config);

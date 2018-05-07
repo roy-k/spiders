@@ -5,7 +5,8 @@ module.exports = {
             script: "./index.js",
             env: {
                 "NODE_ENV": "pro",
-            }
+            },
+            instances: 2
         }
     ]
 }

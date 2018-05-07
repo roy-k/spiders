@@ -1,19 +1,12 @@
-var schedule = require('node-schedule');
+const schedule = require('node-schedule');
 
-// 改到 爬虫文件夹
-var {logN} = require('../../comon/log')
-logN.info('Cheese is Gouda.');
-logN.error('Cheese is too ripe!');
-
-// 引入爬虫 
+// 引入爬虫
+const doubanNowPlaying = require('../spiders/douban_nowPlaying')
+var {logN} = require('../common/log')
 
 const nowRule = {
     second: [
-        5,
-        15,
         25,
-        35,
-        45,
         55
     ],
     // minute: 50,
@@ -21,9 +14,8 @@ const nowRule = {
 }
 
 schedule.scheduleJob(nowRule, function () {
-    console.log('i run it every 10 sec');
-
-
+    logN.info('日程已加入', Date())
+    doubanNowPlaying()
 });
 
 // schedule.scheduleJob(nowRule, function () {
