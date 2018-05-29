@@ -47,7 +47,9 @@ const config = {
 
 log4js.configure(config);
 
-const out = {}
+const out = {
+    default: log4js.getLogger('default')
+}
 spiders.forEach(v => {
     out[v] = log4js.getLogger(v)
 });
