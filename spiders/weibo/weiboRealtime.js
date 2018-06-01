@@ -1,28 +1,27 @@
 'use strict'
+const Async = require('async')
 const puppeteer = require('puppeteer');
-const {launch:launchOpt, pageOpt} = require('../../config/chromium.config');
+const {launch: launchOpt, pageOpt} = require('../../config/chromium.config');
 
 const log = require('../../config/log4js.config.js').weiboRealtime;
 log.info('weiboRealtime log is ready');
 
 const {INDEX_INPUT, REALTTIME_INPUT, DELETE_TEXT, HOT_24} = require('./config/selectors.js').weiboRealtime;
 
-let targetUrl = '';
+const {gapWeiboRealtime} = require('../../config/timeGap.config')
 
-if (process.env.NODE_ENV === 'pro') {
-    targetUrl = ''
-} else {
-    targetUrl = 'http://data.weibo.com/index/realtime'
-}
+const {timeout} = require('../../common/utils')
 
-module.exports = async function () {
-    const browser = await(puppeteer.launch(launchOpt));
+let targetUrl = 'http://data.weibo.com/index/realtime';
+
+module.exports = async function (tasks) {
+    // const browser = await(puppeteer.launch(launchOpt));
+    const browser = await(puppeteer.launch({headless: false}));
     const page = await browser.newPage();
     // 进入页面
     try {
         await page.goto(targetUrl, pageOpt);
-    }
-    catch (error) {
+    } catch (error) {
         log.error('页面导航错误', error);
         browser.close();
     }
@@ -49,33 +48,48 @@ module.exports = async function () {
         await page.waitFor(2000);
     }
 
-    const deleteText = await page.$(DELETE_TEXT);
+    Async.mapSeries(tasks, async v => {
 
-    await deleteText.click();
+        // console.log(v);
+        
 
-    await page.type(REALTTIME_INPUT, name, {delay: 0});
+        const deleteText = await page.$(DELETE_TEXT);
 
-    // 回车
-    await page
-        .keyboard
-        .press('Enter');
+        await deleteText.click();
 
-    await page.waitFor(8000);
+        await page.type(REALTTIME_INPUT, v.name, {delay: 0});
 
-    const data = await page.$eval(HOT_24, li => {
-        const spans = li.children;
+        // 回车
+        await page
+            .keyboard
+            .press('Enter');
 
-        const hotNum = spans[2].innerText;
+        await page.waitFor(8000);
 
-        const trend = spans[4].classList[0];
+        const data = await page.$eval(HOT_24, li => {
+            const spans = li.children;
 
-        const percent = spans[4].textContent;
+            const hotNum = spans[2].innerText;
 
-        return {hotNum, trend, percent}
-    });
+            const trend = spans[4].classList[0];
 
-    console.log('微博热度ok: ', data);
-    log.info(name, '热度', data);
+            const percent = spans[4].textContent;
 
-    page.close();
+            return {hotNum, trend, percent}
+        });
+
+        console.log('微博热度: ',v.name,  data);
+        log.info(v.name, '热度', data);
+
+        await timeout(gapWeiboRealtime);
+
+        return data
+
+    }, (err, contents) => {
+        if (err) 
+            throw err
+            // console.log(contents)
+        page.close();
+    })
+
 }

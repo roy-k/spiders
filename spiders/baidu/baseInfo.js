@@ -68,7 +68,7 @@ module.exports = function (targetUrl) {
                 })
 
             log.info('res: ', result);
-            console.log(result);
+            console.log('百度百科', result);
             res(result);
         });
     })

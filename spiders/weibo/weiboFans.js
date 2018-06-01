@@ -7,15 +7,15 @@ log.info('weiboFans log is ready');
 
 const {LABEL, FOCUS} = require('./config/selectors.js').weiboFans;
 
-let targetUrl = '';
+// let targetUrl = '';
 
-if (process.env.NODE_ENV === 'pro') {
-    targetUrl = ''
-} else {
-    targetUrl = 'https://weibo.com/u/2870450862?is_hot=1'
-}
+// if (process.env.NODE_ENV === 'pro') {
+//     targetUrl = ''
+// } else {
+//     targetUrl = 'https://weibo.com/u/2870450862?is_hot=1'
+// }
 
-module.exports = async function () {
+module.exports = async function (targetUrl) {
     const browser = await(puppeteer.launch(launchOpt));
     const page = await browser.newPage();
     // 进入页面
@@ -43,7 +43,7 @@ module.exports = async function () {
         return values.length
     });
 
-    console.log('微博粉丝ok: ', key, value);
+    console.log('微博粉丝数: ', key, value);
     log.info(key, value);
 
     page.close();

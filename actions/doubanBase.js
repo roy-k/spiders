@@ -2,19 +2,19 @@ const Async = require('async')
 
 const tasks = require('../config/target')
 
-const {gapBuluoFans} = require('../config/timeGap.config')
+const {gapDoubanBase} = require('../config/timeGap.config')
 
 const {timeout} = require('../common/utils')
 
-const getBuluoFans = require('../spiders/buluo/buluoFans')
+const getDoubanBase = require('../spiders/douban/baseInfo')
 
 // 接口
 module.exports = function () {
     Async.mapSeries(tasks, async v => {
 
-        const url = `https://buluo.qq.com/p/barindex.html?bid=${v.buluoId}`
+        const url = `https://movie.douban.com/celebrity/${v.doubanId}/`
 
-        const res = await Promise.all([getBuluoFans(url), timeout(gapBuluoFans)])
+        const res = await Promise.all([getDoubanBase(url), timeout(gapDoubanBase)])
 
         const data = res[0]
 

@@ -1,4 +1,4 @@
-const async = require('async')
+const Async = require('async')
 
 const tasks = require('../config/target')
 
@@ -12,15 +12,18 @@ const getMaoyanMovies = require('../spiders/maoyan/movies')
 
 // 接口
 
-async.mapSeries(tasks, async v => {
-    const res = await Promise.all([getMaoyanMovies(v), timeout(gapMaoyanMovie)])
+module.exports = function () {
+    Async.mapSeries(tasks, async v => {
+        const res = await Promise.all([getMaoyanMovies(v), timeout(gapMaoyanMovie)])
 
-    const data = res[0]
+        const data = res[0]
 
-    log.info('ok', v.name, data.length);
+        log.info('ok', v.name, data.length);
 
-    return data
-}, (err, contents) => {
-    if (err) throw err
-    // console.log(contents)
-})
+        return data
+    }, (err, contents) => {
+        if (err) 
+            throw err
+            // console.log(contents)
+        })
+}

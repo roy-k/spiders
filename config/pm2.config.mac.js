@@ -2,9 +2,9 @@ module.exports = {
     apps: [
         {
             name: "spider",
-            script: "./index.js",
+            script: "../index.js",
             env: {
-                "NODE_ENV": "pro",
+                "NODE_ENV": "mac",
             },
             instances: 2
         }

@@ -1,4 +1,4 @@
-const async = require('async')
+const Async = require('async')
 
 const tasks = require('../config/target')
 
@@ -11,8 +11,9 @@ const log = require('../config/log4js.config').default
 const getBaiduBaike = require('../spiders/baidu/baseInfo')
 
 // 接口 https://baike.baidu.com/item/%E7%99%BD%E6%95%AC%E4%BA%AD
-
-async.mapSeries(tasks, async v => {
+module.exports = function () {
+    Async.mapSeries(tasks, async v => {
+    
     const url = ` https://baike.baidu.com/item/${encodeURIComponent(v.name)}`
 
     const res = await Promise.all([
@@ -28,3 +29,6 @@ async.mapSeries(tasks, async v => {
         throw err
         // console.log(contents)
     })
+}
+
+

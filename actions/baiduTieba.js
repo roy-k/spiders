@@ -1,22 +1,32 @@
-const async = require('async')
+const Async = require('async')
 
 const tasks = require('../config/target')
 
-const {gapMaoyanMovie} = require('../config/timeGap.config')
+const {gapBaiduTieba} = require('../config/timeGap.config')
 
 const {timeout} = require('../common/utils')
 
-const getMaoyanMovies = require('../spiders/maoyan/movies')
+const getBaiduTieba = require('../spiders/baidu/tieba')
 
 // 接口
+module.exports = function () {
+    Async.mapSeries(tasks, async v => {
 
-async.mapSeries(tasks, async v => {
-    const res = await Promise.all([getMaoyanMovies(v), timeout(gapMaoyanMovie)])
+        const url = `http://tieba.baidu.com/f?kw=${encodeURIComponent(v.name)}&ie=utf-8&traceid=`
 
-    const data = res[0]
+        // console.log('url', url);
 
-    return data
-}, (err, contents) => {
-    if (err) throw err
-    // console.log(contents)
-})
+        const res = await Promise.all([
+            getBaiduTieba(url, v.name),
+            timeout(gapBaiduTieba)
+        ])
+
+        const data = res[0]
+
+        return data
+    }, (err, contents) => {
+        if (err) 
+            throw err
+            // console.log(contents)
+        })
+}

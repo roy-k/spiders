@@ -7,15 +7,15 @@ log.info('buluoFans log is ready');
 
 const {LABEL, FOCUS} = require('./config/selectors.js').buluoFans;
 
-let targetUrl = '';
+// let targetUrl = '';
 
-if (process.env.NODE_ENV === 'pro') {
-    targetUrl = ''
-} else {
-    targetUrl = 'https://buluo.qq.com/p/barindex.html?bid=16546'
-}
+// if (process.env.NODE_ENV === 'pro') {
+//     targetUrl = ''
+// } else {
+//     targetUrl = 'https://buluo.qq.com/p/barindex.html?bid=16546'
+// }
 
-module.exports = async function () {
+module.exports = async function (targetUrl) {
     const browser = await(puppeteer.launch(launchOpt));
     const page = await browser.newPage();
     // 进入页面

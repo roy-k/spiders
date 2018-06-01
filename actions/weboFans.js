@@ -2,19 +2,19 @@ const Async = require('async')
 
 const tasks = require('../config/target')
 
-const {gapBuluoFans} = require('../config/timeGap.config')
+const {gapWeiboFans} = require('../config/timeGap.config')
 
 const {timeout} = require('../common/utils')
 
-const getBuluoFans = require('../spiders/buluo/buluoFans')
+const getWeiboFans = require('../spiders/weibo/weiboFans')
 
 // 接口
 module.exports = function () {
     Async.mapSeries(tasks, async v => {
 
-        const url = `https://buluo.qq.com/p/barindex.html?bid=${v.buluoId}`
+        const url = `https://weibo.com/u/${v.weiboId}?is_hot=1`
 
-        const res = await Promise.all([getBuluoFans(url), timeout(gapBuluoFans)])
+        const res = await Promise.all([getWeiboFans(url), timeout(gapWeiboFans)])
 
         const data = res[0]
 

@@ -30,5 +30,7 @@ module.exports = async function getAllMovies({maoyanId:id, name}) {
         offset += 3;
     }
 
+    console.log('猫眼作品数: ', name, data.length);
+    
     return data
 }
