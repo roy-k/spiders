@@ -9,7 +9,8 @@ const spiders = [
     'baidu_tieba',
     'weiboFans',
     'weiboRealtime',
-    'buluoFans'
+    'buluoFans',
+    'wxZci'
 ];
 
 const appenders = {
