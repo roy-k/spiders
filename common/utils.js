@@ -1,5 +1,12 @@
+const axios = require('axios')
+
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function getWxZciKey() {
+    const res = await axios()
+    return res.key;
 }
 
 async function queue(tasks, time, fn) {
@@ -10,5 +17,6 @@ async function queue(tasks, time, fn) {
 
 module.exports = {
     queue,
-    timeout
+    timeout,
+    getWxZciKey,
 };

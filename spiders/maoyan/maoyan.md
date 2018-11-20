@@ -13,3 +13,8 @@
 一次只能查询3个年份的作品
 
 作品详情页: http://maoyan.com/films/1217648
+
+3. 票房 / 播放量
+
+地址 https://piaofang.maoyan.com/movie/1208037
+

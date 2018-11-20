@@ -1,8 +1,8 @@
 'use strict'
 const fs = require('fs');
-module.exports = function(fileName) {
+module.exports = function(path) {
     return new Promise(function (resolve) {
-        fs.readFile(`./${fileName}.json`, ( err, data ) => {
+        fs.readFile(path, ( err, data ) => {
             if ( err )
                 throw err;
             const urls = JSON

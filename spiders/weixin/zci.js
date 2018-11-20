@@ -1,51 +1,61 @@
-const axios = require('axios');
-const log = require('../../config/log4js.config.js').wxZci;
+const request = require('request');
+
+const log = require('../../config/log4js.config').wxZci
+log.info('wxZci log is ready');
 
 var authOptions = {
     method: 'GET',
-    port: '443',
     url: 'https://search.weixin.qq.com/cgi-bin/searchweb/wxindex/querywxindexgroup',
-    params: {
-        "group_query_list": "%E5%B0%8F%E7%A8%8B%E5%BA%8F%3B%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80",
-        "wxindex_query_list": "%E5%B0%8F%E7%A8%8B%E5%BA%8F%3B%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80",
+    qs: {
+        "wxindex_query_list": '王者荣耀',
         "gid": "",
         "openid": "ov4ns0GsWbts8NR9jxN06NWHSjTM",
-        "search_key": "1528167595367433_1538571717"
+        "search_key": "1528195214034101_3123838899"
     },
     headers: {
-        'accept': "*/*",
-        'accept-encoding': "br, gzip, deflate",
-        'accept-language': "zh-cn",
-        'connection': "keep-alive",
-        'content-type': "application/json",
-        'host': "search.weixin.qq.com",
-        'referer': "https://servicewechat.com/wxc026e7662ec26a3a/4/page-frame.html",
-        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_6 like Mac OS X) AppleWebKit/604.5.6 (KH" +
-                "TML, like Gecko) Mobile/15D100 MicroMessenger/6.6.5 NetType/WIFI Language/zh_CN",
-        'cache-control': "no-cache",
-        'postman-token': "9fbbc80b-4557-0c19-bbc5-9c935e24da66"
+        host: "search.weixin.qq.com",
+        referer: "https://servicewechat.com/wxc026e7662ec26a3a/4/page-frame.html"
     },
+    gzip: true,
     json: true
 };
 
-// 单次请求
-async function getZci(id, offset = 0) {
-
-    const {status, data} = await axios(authOptions);
-
-    if (status !== 200) {
-        log.error('请求失败', url)
-        return;
+const generateOptions = (person, key) => {
+    return {
+        method: 'GET',
+        url: 'https://search.weixin.qq.com/cgi-bin/searchweb/wxindex/querywxindexgroup',
+        qs: {
+            "wxindex_query_list": person.name,
+            "gid": "",
+            "openid": "ov4ns0GsWbts8NR9jxN06NWHSjTM",
+            "search_key": key
+        },
+        headers: {
+            host: "search.weixin.qq.com",
+            referer: "https://servicewechat.com/wxc026e7662ec26a3a/4/page-frame.html"
+        },
+        gzip: true,
+        json: true
     }
-
-    return data;
 }
 
-getZci().then(data => {
-    console.log('data', data);
-}, err => {
-    console.log('err', err);
 
-})
+module.exports = function (person) {
 
-module.exports = async function getAllMovies({maoyanId: id, name}) {}
+    const options = generateOptions(person)
+    return new Promise((res, rej) => {
+        request(options, (err, res, body) => {
+            if (err) {
+                log.error('请求错误', err);
+                console.log('err', err);
+                
+            }
+            console.log('res', res);
+            console.log('body', body);
+            console.log('body', typeof body);
+            console.log('data', body.data);
+            console.log('group', body.data.group_wxindex);
+            console.log('wxindex_str', body.data.group_wxindex[0].wxindex_str);
+        })
+    })
+}

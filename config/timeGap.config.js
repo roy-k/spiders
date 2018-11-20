@@ -12,6 +12,12 @@ const gapWeiboFans = 20000;
 
 const gapWeiboRealtime = 10000;
 
+const gapWxZci = 5000;
+
+const gapDuowanList = 1000;
+
+const gapDuowanImg = 5000;
+
 module.exports = {
     gapMaoyanMovie,
     gapBaiduBaike,
@@ -20,4 +26,7 @@ module.exports = {
     gapDoubanBase,
     gapWeiboFans,
     gapWeiboRealtime,
+    gapWxZci,
+    gapDuowanList,
+    gapDuowanImg,
 }
